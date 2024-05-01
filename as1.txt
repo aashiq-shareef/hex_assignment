@@ -1,0 +1,320 @@
+CREATE DATABASE test;
+use test;
+
+CREATE TABLE User (
+  UserID INT PRIMARY KEY,
+  Name VARCHAR(255),
+  Email VARCHAR(255) UNIQUE,
+  Password VARCHAR(255),
+  ContactNumber VARCHAR(20),
+  Address TEXT
+);
+
+CREATE TABLE Courier (
+  CourierID INT PRIMARY KEY,
+  SenderName VARCHAR(255),
+  SenderAddress TEXT,
+  ReceiverName VARCHAR(255),
+  ReceiverAddress TEXT,
+  Weight DECIMAL(5, 2),
+  Status VARCHAR(50),
+  TrackingNumber VARCHAR(20) UNIQUE,
+  DeliveryDate DATE
+);
+
+CREATE TABLE CourierServices (
+  ServiceID INT PRIMARY KEY,
+  ServiceName VARCHAR(100),
+  Cost DECIMAL(8, 2)
+);
+
+CREATE TABLE Employee (
+  EmployeeID INT PRIMARY KEY,
+  Name VARCHAR(255),
+  Email VARCHAR(255) UNIQUE,
+  ContactNumber VARCHAR(20),
+  Role VARCHAR(50),
+  Salary DECIMAL(10, 2)
+);
+
+CREATE TABLE Location (
+  LocationID INT PRIMARY KEY,
+  LocationName VARCHAR(100),
+  Address TEXT
+);
+
+CREATE TABLE Payment (
+  PaymentID INT PRIMARY KEY,
+  CourierID INT,
+  LocationID INT,
+  Amount DECIMAL(10, 2),
+  PaymentDate DATE,
+  FOREIGN KEY (CourierID) REFERENCES Courier(CourierID),
+  FOREIGN KEY (LocationID) REFERENCES Location(LocationID)
+);
+
+INSERT INTO User (UserID, Name, Email, Password, ContactNumber, Address)
+VALUES 
+  (1, 'Zaid', 'zaid@example.in', 'password123', '9812345678', '123 MG Road, Bangalore, Karnataka'),
+  (2, 'Saif', 'saif@example.in', 'secret321', '9876543210', '456 Brigade Road, Bangalore, Karnataka'),
+  (3, 'Jack', 'jack@example.in', 'password456', '9123456780', '789 Residency Road, Bangalore, Karnataka'),
+  (4, 'Sunil', 'sunil@example.in', 'abc123', '9182736450', '321 Indiranagar, Bangalore, Karnataka'),
+  (5, 'Aamir', 'aamir@example.in', 'password789', '9871234560', '567 Koramangala, Bangalore, Karnataka');
+
+INSERT INTO Courier (CourierID, SenderName, SenderAddress, ReceiverName, ReceiverAddress, Weight, Status, TrackingNumber, DeliveryDate)
+VALUES
+  (1, 'Zaid', '123 MG Road, Bangalore, Karnataka', 'Saif', '456 Brigade Road, Bangalore, Karnataka', 2.5, 'In Transit', 'TRK123DHL', '2024-05-10'),
+  (2, 'Sunil', '321 Indiranagar, Bangalore, Karnataka', 'Jack', '789 Residency Road, Bangalore, Karnataka', 3.0, 'Delivered', 'TRK456FEDEX', '2024-05-08'),
+  (3, 'Aamir', '567 Koramangala, Bangalore, Karnataka', 'Zaid', '123 MG Road, Bangalore, Karnataka', 1.5, 'In Transit', 'TRK789DTDC', '2024-05-12'),
+  (4, 'Jack', '789 Residency Road, Bangalore, Karnataka', 'Sunil', '321 Indiranagar, Bangalore, Karnataka', 2.2, 'Pending', 'TRK321UPS', '2024-05-14'),
+  (5, 'Saif', '456 Brigade Road, Bangalore, Karnataka', 'Aamir', '567 Koramangala, Bangalore, Karnataka', 2.7, 'Delivered', 'TRK654BLUEDART', '2024-05-09');
+
+INSERT INTO CourierServices (ServiceID, ServiceName, Cost)
+VALUES 
+  (1, 'DHL', 10.00),
+  (2, 'FedEx Express', 20.00),
+  (3, 'DTDC Express Limited', 30.00),
+  (4, 'UPS Supply Chain Solutions', 40.00),
+  (5, 'Blue Dart', 50.00);
+
+INSERT INTO Employee (EmployeeID, Name, Email, ContactNumber, Role, Salary)
+VALUES 
+  (1, 'Jeels', 'jeels.employee@example.in', '9812345678', 'Manager', 500000),
+  (2, 'Abdul', 'abdul.employee@example.in', '9876543210', 'Clerk', 300000),
+  (3, 'Hisham', 'hisham.employee@example.in', '9123456780', 'Driver', 400000),
+  (4, 'Bakshi', 'bakshi.employee@example.in', '9182736450', 'Dispatcher', 350000),
+  (5, 'Sahil', 'sahil.employee@example.in', '9871234560', 'Customer Service', 320000);
+
+INSERT INTO Location (LocationID, LocationName, Address)
+VALUES 
+  (1, 'Head Office', '123 Corporate Blvd, Bangalore, Karnataka'),
+  (2, 'Warehouse', '456 Industrial Ave, Bangalore, Karnataka'),
+  (3, 'Delivery Hub', '789 Logistic Rd, Bangalore, Karnataka'),
+  (4, 'Customer Center', '321 Commercial St, Bangalore, Karnataka'),
+  (5, 'Regional Office', '567 Business Dr, Bangalore, Karnataka');
+
+INSERT INTO Payment (PaymentID, CourierID, LocationID, Amount, PaymentDate)
+VALUES
+  (1, 1, 1, 25.00, '2024-05-11'),
+  (2, 2, 2, 40.00, '2024-05-09'),
+  (3, 3, 3, 30.00, '2024-05-13'),
+  (4, 4, 4, 50.00, '2024-05-15'),
+  (5, 5, 5, 35.00, '2024-05-10');
+
+TASK 2:
+
+1. SELECT * FROM User;
+
+2. SELECT * FROM Courier WHERE SenderName = 'Zaid';
+
+3. SELECT * FROM Courier;
+
+4. SELECT * FROM Courier WHERE CourierID = 1;
+
+5. SELECT * FROM Courier WHERE CourierID = 1;
+
+6. SELECT * FROM Courier WHERE Status != 'Delivered';
+
+7. SELECT * FROM Courier WHERE DeliveryDate = CURRENT_DATE;
+
+8. SELECT * FROM Courier WHERE Status = 'In Transit';
+
+9. SELECT COUNT(*) AS TotalPackages, CourierID FROM Courier GROUP BY CourierID;
+
+10. SELECT AVG(DATEDIFF(DeliveryDate, '2024-05-01')) AS AvgDeliveryTime, CourierID FROM Courier GROUP BY CourierID;
+
+11. SELECT * FROM Courier WHERE Weight BETWEEN 1.0 AND 3.0;
+
+12. SELECT * FROM Employee WHERE Name LIKE '%John%';
+
+13. SELECT * FROM Payment WHERE Amount > 50.00;
+
+TASK 3:
+
+14. SELECT EmployeeID, COUNT(CourierID) AS TotalCouriers
+    FROM Courier
+    GROUP BY EmployeeID;
+
+15. SELECT LocationID, SUM(Amount) AS TotalRevenue
+    FROM Payment
+    GROUP BY LocationID;
+
+16. SELECT LocationID, COUNT(CourierID) AS TotalCouriers
+    FROM Courier
+    GROUP BY LocationID;
+
+17. SELECT CourierID, AVG(DATEDIFF(DeliveryDate, '2024-05-15')) AS AvgDeliveryTime
+    FROM Courier
+    GROUP BY CourierID
+    ORDER BY AvgDeliveryTime DESC
+    LIMIT 1;
+
+18. SELECT LocationID, SUM(Amount) AS TotalPayments
+    FROM Payment
+    GROUP BY LocationID
+    HAVING TotalPayments < 40.00;
+
+19. SELECT LocationID, SUM(Amount) AS TotalPayments
+    FROM Payment
+    GROUP BY LocationID;
+
+20. SELECT CourierID, SUM(Amount) AS TotalPayments
+    FROM Payment
+    WHERE LocationID = 2
+    GROUP BY CourierID
+    HAVING TotalPayments > 30.00;
+
+21. SELECT CourierID, SUM(Amount) AS TotalPayments
+    FROM Payment
+    WHERE PaymentDate > '2024-05-09'
+    GROUP BY CourierID
+    HAVING TotalPayments > 30.00;
+
+22. SELECT LocationID, SUM(Amount) AS TotalRevenue
+    FROM Payment
+    WHERE PaymentDate > '2024-05-09'
+    GROUP BY LocationID
+    HAVING TotalRevenue > 35.00;
+
+TASK 4:
+
+23. SELECT p.PaymentID, p.Amount, c.CourierID, c.SenderName
+    FROM Payment p
+    INNER JOIN Courier c ON p.CourierID = c.CourierID;
+
+24. SELECT p.PaymentID, p.Amount, l.LocationID, l.LocationName
+    FROM Payment p
+    INNER JOIN Location l ON p.LocationID = l.LocationID;
+
+25. SELECT p.PaymentID, p.Amount, c.CourierID, l.LocationName
+    FROM Payment p
+    INNER JOIN Courier c ON p.CourierID = c.CourierID
+    INNER JOIN Location l ON p.LocationID = l.LocationID;
+
+26. SELECT p.*, c.*
+    FROM Payment p
+    INNER JOIN Courier c ON p.CourierID = c.CourierID;
+
+27. SELECT c.CourierID, SUM(p.Amount) AS TotalPayments
+    FROM Payment p
+    INNER JOIN Courier c ON p.CourierID = c.CourierID
+    GROUP BY c.CourierID;
+
+28. SELECT * 
+    FROM Payment 
+    WHERE PaymentDate = '2024-05-09';
+
+29. SELECT c.*, p.PaymentID, p.Amount
+    FROM Courier c
+    LEFT JOIN Payment p ON c.CourierID = p.CourierID;
+
+30. SELECT p.*, l.*
+    FROM Payment p
+    LEFT JOIN Location l ON p.LocationID = l.LocationID;
+
+31. SELECT p.*, c.*
+    FROM Payment p
+    RIGHT JOIN Courier c ON p.CourierID = c.CourierID;
+
+32. SELECT * 
+    FROM Payment 
+    WHERE PaymentDate BETWEEN '2024-05-08' AND '2024-05-12';
+
+33. SELECT u.*, c.*
+    FROM User u
+    LEFT JOIN Courier c ON u.Name = c.SenderName;
+
+34. SELECT c.*, cs.ServiceName
+    FROM Courier c
+    LEFT JOIN CourierServices cs ON c.CourierID = cs.ServiceID;
+
+35. SELECT e.*, p.PaymentID
+    FROM Employee e
+    LEFT JOIN Payment p ON e.EmployeeID = p.PaymentID;
+
+36. SELECT u.*, cs.*
+    FROM User u
+    CROSS JOIN CourierServices cs;
+
+37. SELECT e.*, l.*
+    FROM Employee e
+    CROSS JOIN Location l;
+
+38. SELECT c.*, c.SenderName
+    FROM Courier c
+    LEFT JOIN Courier c2 ON c.CourierID = c2.CourierID;
+
+39. SELECT c.*, c.ReceiverName
+    FROM Courier c
+    LEFT JOIN Courier c2 ON c.CourierID = c2.CourierID;
+
+40. SELECT c.*, cs.*
+    FROM Courier c
+    LEFT JOIN CourierServices cs ON c.CourierID = cs.ServiceID;
+
+41. SELECT e.EmployeeID, COUNT(c.CourierID) AS TotalCouriers
+    FROM Employee e
+    LEFT JOIN Courier c ON e.EmployeeID = c.CourierID
+    GROUP BY e.EmployeeID;
+
+42. SELECT l.LocationID, SUM(p.Amount) AS TotalPayments
+    FROM Location l
+    LEFT JOIN Payment p ON l.LocationID = p.LocationID
+    GROUP BY l.LocationID;
+
+43. SELECT c.*
+    FROM Courier c
+    WHERE c.SenderName = 'Zaid';
+
+44. SELECT e.Role, COUNT(e.EmployeeID) AS NumEmployees
+    FROM Employee e
+    GROUP BY e.Role
+    HAVING NumEmployees > 1;
+
+45. SELECT p.*
+    FROM Payment p
+    LEFT JOIN Courier c ON p.CourierID = c.CourierID
+    WHERE c.SenderAddress = '123 MG Road, Bangalore, Karnataka';
+
+46. SELECT c.*
+    FROM Courier c
+    WHERE c.SenderAddress = '123 MG Road, Bangalore, Karnataka';
+
+47. SELECT e.*, COUNT(c.CourierID) AS DeliveredCount
+    FROM Employee e
+    LEFT JOIN Courier c ON e.EmployeeID = c.CourierID
+    WHERE c.Status = 'Delivered'
+    GROUP BY e.EmployeeID;
+
+48. SELECT c.*, p.Amount, cs.Cost
+    FROM Courier c
+    LEFT JOIN Payment p ON c.CourierID = p.CourierID
+    LEFT JOIN CourierServices cs ON c.CourierID = cs.ServiceID
+    WHERE p.Amount > cs.Cost;
+
+TASK 5:
+
+49. SELECT * 
+    FROM Courier 
+    WHERE Weight > (SELECT AVG(Weight) FROM Courier);
+
+50. SELECT Name 
+    FROM Employee 
+    WHERE Salary > (SELECT AVG(Salary) FROM Employee);
+
+51. SELECT SUM(Cost) AS TotalCost 
+    FROM CourierServices 
+    WHERE Cost < (SELECT MAX(Cost) FROM CourierServices);
+
+52. SELECT * 
+    FROM Courier 
+    WHERE EXISTS ( SELECT FROM Payment WHERE Payment.CourierID = Courier.CourierID);
+
+53. SELECT LocationID 
+    FROM Payment 
+    WHERE Amount = (SELECT MAX(Amount) FROM Payment);
+
+54. SELECT * 
+    FROM Courier 
+    WHERE Weight > ALL (SELECT Weight FROM Courier WHERE SenderName = 'Zaid');
+
